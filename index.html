@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تدريب على التصيد</title>
+</head>
+
+<body>
+  <h2>تسجيل الدخول</h2>
+
+  <input id="username" type="text" placeholder="اسم المستخدم">
+  <br><br>
+
+  <input id="password" type="password" placeholder="كلمة المرور">
+  <br><br>
+
+  <button onclick="training()">تسجيل الدخول</button>
+
+  <p id="result"></p>
+
+  <h3>سجل التدريب</h3>
+  <p id="history"></p>
+
+  <script>
+    function training() {
+      let history = JSON.parse(
+        localStorage.getItem("training_history") || "[]"
+      );
+
+      // لا نأخذ كلمة المرور التي كتبها المستخدم
+      const fakePassword = "TRAINING_PASSWORD";
+
+      // نحفظ كلمة مرور تدريبية ثابتة فقط
+      localStorage.setItem("training_password", fakePassword);
+
+      history.push({
+        time: new Date().toLocaleString("ar-DZ")
+      });
+
+      localStorage.setItem(
+        "training_history",
+        JSON.stringify(history)
+      );
+
+      document.getElementById("result").innerHTML =
+        "🚨 هذه محاكاة توعوية!<br>" +
+        "كلمة المرور التي كتبتها لم يتم حفظها أو إرسالها.";
+
+      showHistory();
+    }
+
+    function showHistory() {
+      let history = JSON.parse(
+        localStorage.getItem("training_history") || "[]"
+      );
+
+      document.getElementById("history").innerHTML =
+        "عدد المحاولات: " + history.length + "<br><br>" +
+        history.map((x, i) =>
+          (i + 1) + " — " + x.time
+        ).join("<br>");
+    }
+
+    showHistory();
+  </script>
+</body>
+</html>
